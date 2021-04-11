@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="author" content="Wendy Kong">
+    <meta name="description" content="A HTML ruler to measure length in cm">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>📏</text></svg>">
+    <title>HTML Ruler</title>
+    <style>
+        body {
+            margin: 0;
+            counter-reset: ruler;
+            font-family: monospace;
+        }
+        .ruler {
+            height: 1cm;
+            width: 10cm;
+        }
+        .ruler-element {
+            height: 100vh;
+            width: 1cm;
+            min-width: 1cm;
+            background: #ffc8da;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .ruler-element:nth-child(odd){
+            background: #d1ecff;
+        }
+        .ruler-element:before {
+            counter-increment: ruler;
+            content: counter(ruler);
+            mix-blend-mode: color-burn;
+            opacity: 0.4;
+            font-weight: 900;
+            font-size: 150%;
+        }
+        #container {
+            display: flex;
+        }
+        #container:after {
+            content: 'ruler (cm)';
+            position: absolute;
+            font-size: 10em;
+            opacity: 0.2;
+            bottom: 10px;
+            mix-blend-mode: color-burn;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div id="container">
+    </div>
+
+    <script>
+        window.onresize = (e) => {
+            renderRulerBlocks();
+        }
+
+        function getScreenLengthInCm() {
+            const windowSizeInPx = window.innerWidth;
+            const windowSizeInCm = windowSizeInPx / 100 * 2.645833;
+            return Math.ceil(windowSizeInCm);
+        }
+
+        function renderRulerBlocks() {
+            const screenLengthInCm = getScreenLengthInCm();
+            let counter = screenLengthInCm;
+
+            document.getElementById('container').innerHTML = '';
+
+            while(counter > 0) {
+                const el = document.createElement('div');
+                el.classList.add('ruler-element');
+                document.getElementById('container').appendChild(el);
+                counter--;
+            }
+        }
+
+        renderRulerBlocks();
+    </script>
+</body>
+</html>
